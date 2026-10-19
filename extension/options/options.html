@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-i18n="optionsTitle"></title>
+  <link rel="icon" href="../icons/icon.svg">
+  <link rel="stylesheet" href="../shared/ui.css">
+  <link rel="stylesheet" href="options.css">
+</head>
+<body>
+  <div class="page">
+    <header class="page-head">
+      <img src="../icons/icon.svg" alt="" width="44" height="44">
+      <div>
+        <h1 data-i18n="extensionName"></h1>
+        <p class="muted" data-i18n="optionsTagline"></p>
+      </div>
+      <span id="saved" class="saved" role="status" aria-live="polite"></span>
+    </header>
+
+    <section id="welcome" class="card welcome" hidden>
+      <h2 data-i18n="welcomeTitle"></h2>
+      <ol>
+        <li data-i18n="welcomeStep1"></li>
+        <li id="welcome-step2"></li>
+        <li data-i18n="welcomeStep3"></li>
+      </ol>
+      <button id="welcome-dismiss" class="btn primary" type="button" data-i18n="welcomeDismiss"></button>
+    </section>
+
+    <section class="block" aria-labelledby="rules-heading">
+      <div class="block-head">
+        <h2 id="rules-heading" data-i18n="rulesHeading"></h2>
+        <p class="muted" data-i18n="rulesHint"></p>
+      </div>
+      <div id="rule-list" class="rule-list"></div>
+      <button id="add-rule" class="btn ghost add-rule" type="button">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5z"/></svg>
+        <span data-i18n="addRule"></span>
+      </button>
+    </section>
+
+    <section class="block" aria-labelledby="behavior-heading">
+      <div class="block-head">
+        <h2 id="behavior-heading" data-i18n="behaviorHeading"></h2>
+      </div>
+      <div class="card settings">
+        <fieldset class="setting">
+          <legend data-i18n="modeHeading"></legend>
+          <label class="choice"><input type="radio" name="mode" value="collect"><span data-i18n="modeCollectLong"></span></label>
+          <label class="choice"><input type="radio" name="mode" value="perWindow"><span data-i18n="modePerWindowLong"></span></label>
+        </fieldset>
+        <label class="setting toggle-row">
+          <span class="setting-text"><span data-i18n="collapseLabel"></span></span>
+          <span class="switch"><input type="checkbox" id="collapse" role="switch"><span class="track"></span></span>
+        </label>
+        <label class="setting toggle-row">
+          <span class="setting-text"><span data-i18n="includePinnedLabel"></span><small class="muted" data-i18n="includePinnedHelp"></small></span>
+          <span class="switch"><input type="checkbox" id="includePinned" role="switch"><span class="track"></span></span>
+        </label>
+        <label class="setting toggle-row">
+          <span class="setting-text"><span data-i18n="skipGroupedLabel"></span><small class="muted" data-i18n="skipGroupedHelp"></small></span>
+          <span class="switch"><input type="checkbox" id="skipGrouped" role="switch"><span class="track"></span></span>
+        </label>
+        <label class="setting toggle-row">
+          <span class="setting-text"><span data-i18n="autoGroupLabel"></span><small class="muted" data-i18n="autoGroupHelp"></small></span>
+          <span class="switch"><input type="checkbox" id="autoGroup" role="switch"><span class="track"></span></span>
+        </label>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="shortcut-heading">
+      <div class="block-head">
+        <h2 id="shortcut-heading" data-i18n="shortcutHeading"></h2>
+      </div>
+      <div class="card settings">
+        <div class="setting kv"><span data-i18n="shortcutGroup"></span><kbd id="key-group"></kbd></div>
+        <div class="setting kv"><span data-i18n="shortcutUndo"></span><kbd id="key-undo"></kbd></div>
+        <div class="setting">
+          <button id="change-shortcuts" class="btn ghost" type="button" data-i18n="shortcutChange"></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="backup-heading">
+      <div class="block-head">
+        <h2 id="backup-heading" data-i18n="backupHeading"></h2>
+        <p class="muted" data-i18n="backupHelp"></p>
+      </div>
+      <div class="button-row">
+        <button id="export" class="btn ghost" type="button" data-i18n="exportButton"></button>
+        <button id="import" class="btn ghost" type="button" data-i18n="importButton"></button>
+        <input id="import-file" type="file" accept=".json,.txt,application/json,text/plain" hidden>
+        <button id="reset" class="btn ghost danger-text" type="button" data-i18n="resetButton"></button>
+      </div>
+    </section>
+
+    <footer class="page-foot muted">
+      <p data-i18n="footerPrivacy"></p>
+      <p id="version"></p>
+    </footer>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden>
+    <span id="toast-text"></span>
+    <button id="toast-action" class="link-btn" type="button" hidden></button>
+  </div>
+
+  <template id="rule-template">
+    <article class="rule-card">
+      <div class="rule-head">
+        <span class="switch"><input type="checkbox" class="r-enabled" role="switch" data-i18n-aria-label="ruleEnabledLabel"><span class="track"></span></span>
+        <span class="dot r-dot"></span>
+        <input class="r-name" type="text" maxlength="100" data-i18n-placeholder="ruleNamePlaceholder" data-i18n-aria-label="ruleNameLabel">
+        <span class="chip r-count"></span>
+        <div class="rule-tools">
+          <button class="icon-btn r-up" type="button" data-i18n-title="ruleMoveUp" data-i18n-aria-label="ruleMoveUp">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 3.5a.75.75 0 0 1 .53.22l4 4a.75.75 0 0 1-1.06 1.06L8.75 6.06v6.19a.75.75 0 0 1-1.5 0V6.06L4.53 8.78a.75.75 0 0 1-1.06-1.06l4-4A.75.75 0 0 1 8 3.5z"/></svg>
+          </button>
+          <button class="icon-btn r-down" type="button" data-i18n-title="ruleMoveDown" data-i18n-aria-label="ruleMoveDown">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 12.5a.75.75 0 0 1-.53-.22l-4-4a.75.75 0 0 1 1.06-1.06l2.72 2.72V3.75a.75.75 0 0 1 1.5 0v6.19l2.72-2.72a.75.75 0 1 1 1.06 1.06l-4 4A.75.75 0 0 1 8 12.5z"/></svg>
+          </button>
+          <button class="icon-btn danger r-delete" type="button" data-i18n-title="ruleDelete" data-i18n-aria-label="ruleDelete">
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6.5 1.5h3a1 1 0 0 1 1 1V3h3a.75.75 0 0 1 0 1.5h-.6l-.7 8.6A2 2 0 0 1 10.2 15H5.8a2 2 0 0 1-2-1.9L3.1 4.5h-.6a.75.75 0 0 1 0-1.5h3v-.5a1 1 0 0 1 1-1zM4.6 4.5l.7 8.5a.5.5 0 0 0 .5.5h4.4a.5.5 0 0 0 .5-.5l.7-8.5H4.6z"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="rule-body">
+        <div class="field">
+          <span class="field-label" data-i18n="ruleColorLabel"></span>
+          <div class="swatches r-swatches" role="radiogroup"></div>
+        </div>
+        <div class="field-grid">
+          <label class="field">
+            <span class="field-label" data-i18n="ruleTypeLabel"></span>
+            <select class="r-type">
+              <option value="site" data-i18n="typeSite"></option>
+              <option value="contains" data-i18n="typeContains"></option>
+              <option value="prefix" data-i18n="typePrefix"></option>
+              <option value="regex" data-i18n="typeRegex"></option>
+            </select>
+            <small class="muted r-help"></small>
+          </label>
+          <label class="field">
+            <span class="field-label" data-i18n="rulePatternsLabel"></span>
+            <textarea class="r-patterns" rows="3" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+            <ul class="r-errors errors"></ul>
+          </label>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script src="../shared/rules.js"></script>
+  <script src="../shared/settings.js"></script>
+  <script src="../shared/grouping.js"></script>
+  <script src="../shared/i18n.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

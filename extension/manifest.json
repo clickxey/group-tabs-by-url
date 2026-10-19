@@ -1,0 +1,58 @@
+{
+  "manifest_version": 3,
+  "name": "__MSG_extensionName__",
+  "short_name": "__MSG_extensionShortName__",
+  "version": "1.0.0",
+  "description": "__MSG_extensionDescription__",
+  "default_locale": "en",
+
+  "permissions": ["tabs", "tabGroups", "storage", "menus"],
+
+  "background": {
+    "scripts": [
+      "shared/rules.js",
+      "shared/settings.js",
+      "shared/grouping.js",
+      "background/background.js"
+    ]
+  },
+
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "__MSG_actionTitle__",
+    "default_icon": "icons/icon.svg"
+  },
+
+  "options_ui": {
+    "page": "options/options.html",
+    "open_in_tab": true
+  },
+
+  "icons": {
+    "16": "icons/icon.svg",
+    "32": "icons/icon.svg",
+    "48": "icons/icon.svg",
+    "96": "icons/icon.svg",
+    "128": "icons/icon.svg"
+  },
+
+  "commands": {
+    "group-now": {
+      "suggested_key": { "default": "Alt+Shift+G" },
+      "description": "__MSG_commandGroupNow__"
+    },
+    "undo-grouping": {
+      "description": "__MSG_commandUndo__"
+    }
+  },
+
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "{c1d7a4b2-5e3f-4a8b-9d6c-2f0e1b7a3c95}",
+      "strict_min_version": "140.0",
+      "data_collection_permissions": {
+        "required": ["none"]
+      }
+    }
+  }
+}

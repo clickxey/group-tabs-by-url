@@ -1,0 +1,604 @@
+{
+  "extensionName": {
+    "message": "Group Tabs by URL",
+    "description": "Add-on name shown in the add-ons manager and on addons.mozilla.org."
+  },
+  "extensionShortName": {
+    "message": "Group Tabs",
+    "description": "Short add-on name."
+  },
+  "extensionDescription": {
+    "message": "Gather tabs whose address matches your rules into tidy tab groups.",
+    "description": "Add-on description (keep under 132 characters)."
+  },
+  "actionTitle": {
+    "message": "Group tabs by URL",
+    "description": "Tooltip of the toolbar button."
+  },
+  "commandGroupNow": {
+    "message": "Group tabs using your rules",
+    "description": "Keyboard shortcut description."
+  },
+  "commandUndo": {
+    "message": "Undo the last grouping",
+    "description": "Keyboard shortcut description."
+  },
+  "menuGroupSite": {
+    "message": "Group all tabs from $SITE$",
+    "description": "Tab context menu. SITE is a domain like github.com.",
+    "placeholders": {
+      "site": {
+        "content": "$1"
+      }
+    }
+  },
+  "menuGroupSiteGeneric": {
+    "message": "Group all tabs from this site",
+    "description": "Tab context menu when the tab isn't a website."
+  },
+  "menuAddRule": {
+    "message": "Add a rule for $SITE$…",
+    "description": "Tab context menu. SITE is a domain.",
+    "placeholders": {
+      "site": {
+        "content": "$1"
+      }
+    }
+  },
+  "menuAddRuleGeneric": {
+    "message": "Add a rule for this site…",
+    "description": "Tab context menu, generic."
+  },
+  "menuUndo": {
+    "message": "Undo last grouping",
+    "description": "Toolbar button context menu."
+  },
+  "menuEditRules": {
+    "message": "Edit rules…",
+    "description": "Toolbar button context menu."
+  },
+  "popupSettings": {
+    "message": "Settings",
+    "description": "Popup: settings button tooltip."
+  },
+  "popupRulesHeading": {
+    "message": "Your rules",
+    "description": "Popup: heading above the rule list."
+  },
+  "popupNoRules": {
+    "message": "No rules yet. Add one to start grouping.",
+    "description": "Popup: empty state."
+  },
+  "popupAddRule": {
+    "message": "Add a rule",
+    "description": "Popup: button in the empty state."
+  },
+  "popupAddSite": {
+    "message": "Add a rule for $SITE$",
+    "description": "Popup: quick-add button for the current tab's site.",
+    "placeholders": {
+      "site": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupToggleRule": {
+    "message": "Turn “$NAME$” on or off",
+    "description": "Popup: accessible label of a rule's switch.",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupModeLabel": {
+    "message": "Put groups",
+    "description": "Popup: label before the window choice."
+  },
+  "modeCollect": {
+    "message": "In this window",
+    "description": "Popup: collect mode, short."
+  },
+  "modePerWindow": {
+    "message": "In each window",
+    "description": "Popup: per-window mode, short."
+  },
+  "modeCollectHint": {
+    "message": "Matching tabs from other windows move into this one.",
+    "description": "Popup: hint under collect mode."
+  },
+  "modePerWindowHint": {
+    "message": "Tabs stay in their own windows; each window gets its own groups.",
+    "description": "Popup: hint under per-window mode."
+  },
+  "popupGroupButton_one": {
+    "message": "Group $COUNT$ tab",
+    "description": "Popup: main button, singular.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupGroupButton_other": {
+    "message": "Group $COUNT$ tabs",
+    "description": "Popup: main button, plural.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupNothingToGroup": {
+    "message": "No open tabs match",
+    "description": "Popup: main button when nothing matches."
+  },
+  "popupWorking": {
+    "message": "Grouping…",
+    "description": "Popup: main button while working."
+  },
+  "popupDone_one": {
+    "message": "Done — $COUNT$ tab grouped.",
+    "description": "Popup: result, singular.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupDone_other": {
+    "message": "Done — $COUNT$ tabs grouped.",
+    "description": "Popup: result, plural.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupUndo": {
+    "message": "Undo",
+    "description": "Popup: undo button next to the result."
+  },
+  "popupUndoLast": {
+    "message": "Undo last grouping",
+    "description": "Popup: undo link."
+  },
+  "popupUndone_one": {
+    "message": "Put $COUNT$ tab back.",
+    "description": "Popup: after undo, singular.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupUndone_other": {
+    "message": "Put $COUNT$ tabs back.",
+    "description": "Popup: after undo, plural.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupNothingToUndo": {
+    "message": "Nothing to undo.",
+    "description": "Popup: undo had nothing to restore."
+  },
+  "popupShortcut": {
+    "message": "Shortcut: $KEYS$",
+    "description": "Popup footer. KEYS like Alt+Shift+G.",
+    "placeholders": {
+      "keys": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupError": {
+    "message": "Something went wrong: $MESSAGE$",
+    "description": "Generic error.",
+    "placeholders": {
+      "message": {
+        "content": "$1"
+      }
+    }
+  },
+  "popupRuleOff": {
+    "message": "Off",
+    "description": "Popup: shown instead of a count for a disabled rule."
+  },
+  "tabCount_one": {
+    "message": "$COUNT$ tab",
+    "description": "Count, singular.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "tabCount_other": {
+    "message": "$COUNT$ tabs",
+    "description": "Count, plural.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "optionsTitle": {
+    "message": "Group Tabs by URL — Settings",
+    "description": "Options page <title>."
+  },
+  "optionsTagline": {
+    "message": "Gather tabs that match your rules into tidy tab groups.",
+    "description": "Options page subtitle."
+  },
+  "welcomeTitle": {
+    "message": "Thanks for installing!",
+    "description": "First-run banner title."
+  },
+  "welcomeStep1": {
+    "message": "Each rule below becomes a tab group. A few examples are set up already — edit, switch off or delete them.",
+    "description": "First-run banner."
+  },
+  "welcomeStep2": {
+    "message": "Click the toolbar button (or press $KEYS$) to group your open tabs.",
+    "description": "First-run banner.",
+    "placeholders": {
+      "keys": {
+        "content": "$1"
+      }
+    }
+  },
+  "welcomeStep2NoKeys": {
+    "message": "Click the toolbar button to group your open tabs.",
+    "description": "First-run banner when no shortcut is set."
+  },
+  "welcomeStep3": {
+    "message": "Changed your mind? Undo puts every tab back where it was.",
+    "description": "First-run banner."
+  },
+  "welcomeDismiss": {
+    "message": "Got it",
+    "description": "First-run banner button."
+  },
+  "rulesHeading": {
+    "message": "Rules",
+    "description": "Options section heading."
+  },
+  "rulesHint": {
+    "message": "Each tab goes to the first rule it matches, so order matters. Changes save automatically.",
+    "description": "Options: rules help."
+  },
+  "ruleNameLabel": {
+    "message": "Group name",
+    "description": "Rule field label."
+  },
+  "ruleNamePlaceholder": {
+    "message": "Group name, e.g. Social",
+    "description": "Rule name placeholder."
+  },
+  "ruleColorLabel": {
+    "message": "Color",
+    "description": "Rule field label."
+  },
+  "ruleEnabledLabel": {
+    "message": "Rule on",
+    "description": "Accessible label for the rule switch."
+  },
+  "ruleTypeLabel": {
+    "message": "Match by",
+    "description": "Rule field label."
+  },
+  "rulePatternsLabel": {
+    "message": "Matches (one per line)",
+    "description": "Rule field label."
+  },
+  "typeSite": {
+    "message": "Website",
+    "description": "Match type."
+  },
+  "typeContains": {
+    "message": "Address contains",
+    "description": "Match type."
+  },
+  "typePrefix": {
+    "message": "Address starts with",
+    "description": "Match type."
+  },
+  "typeRegex": {
+    "message": "Regular expression",
+    "description": "Match type."
+  },
+  "typeSiteHelp": {
+    "message": "A site and all its subdomains: x.com also covers mobile.x.com, but not netflix.com. Add a path to narrow it down, like google.com/search.",
+    "description": "Help for the Website match type."
+  },
+  "typeContainsHelp": {
+    "message": "Any address containing this text anywhere. Not case-sensitive.",
+    "description": "Help for Address contains."
+  },
+  "typePrefixHelp": {
+    "message": "Addresses that begin with this text. Handy for pages like about:newtab, or a folder like https://github.com/mozilla.",
+    "description": "Help for Address starts with."
+  },
+  "typeRegexHelp": {
+    "message": "Advanced: a JavaScript regular expression tested against the full address. Not case-sensitive.",
+    "description": "Help for Regular expression."
+  },
+  "placeholderSite": {
+    "message": "x.com\ntwitter.com",
+    "description": "Placeholder, keep the line break."
+  },
+  "placeholderContains": {
+    "message": "/search?q=\nutm_source=",
+    "description": "Placeholder, keep the line break."
+  },
+  "placeholderPrefix": {
+    "message": "about:newtab\nhttps://github.com/mozilla",
+    "description": "Placeholder, keep the line break."
+  },
+  "placeholderRegex": {
+    "message": "^https://(www\\.)?google\\.[a-z.]+/search",
+    "description": "Placeholder."
+  },
+  "ruleMoveUp": {
+    "message": "Move up",
+    "description": "Button tooltip."
+  },
+  "ruleMoveDown": {
+    "message": "Move down",
+    "description": "Button tooltip."
+  },
+  "ruleDelete": {
+    "message": "Delete rule",
+    "description": "Button tooltip."
+  },
+  "ruleDeleted": {
+    "message": "Deleted “$NAME$”.",
+    "description": "Toast after deleting a rule.",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      }
+    }
+  },
+  "undoDelete": {
+    "message": "Undo",
+    "description": "Toast button."
+  },
+  "ruleMatches_one": {
+    "message": "$COUNT$ open tab",
+    "description": "Rule chip, singular.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "ruleMatches_other": {
+    "message": "$COUNT$ open tabs",
+    "description": "Rule chip, plural.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "ruleMatchesOff": {
+    "message": "Off",
+    "description": "Rule chip for a disabled rule."
+  },
+  "ruleNoPatterns": {
+    "message": "Add at least one line so this rule matches something.",
+    "description": "Rule warning."
+  },
+  "errorInvalidSite": {
+    "message": "Line $LINE$: “$TEXT$” isn't a website address. For pages like about:newtab, choose “Address starts with”.",
+    "description": "Rule validation.",
+    "placeholders": {
+      "line": {
+        "content": "$1"
+      },
+      "text": {
+        "content": "$2"
+      }
+    }
+  },
+  "errorInvalidRegex": {
+    "message": "Line $LINE$: “$TEXT$” isn't a valid regular expression.",
+    "description": "Rule validation.",
+    "placeholders": {
+      "line": {
+        "content": "$1"
+      },
+      "text": {
+        "content": "$2"
+      }
+    }
+  },
+  "errorInvalidType": {
+    "message": "Line $LINE$: unknown match type.",
+    "description": "Rule validation.",
+    "placeholders": {
+      "line": {
+        "content": "$1"
+      }
+    }
+  },
+  "addRule": {
+    "message": "Add rule",
+    "description": "Options button."
+  },
+  "colorBlue": {
+    "message": "Blue",
+    "description": "Tab group color."
+  },
+  "colorRed": {
+    "message": "Red",
+    "description": "Tab group color."
+  },
+  "colorYellow": {
+    "message": "Yellow",
+    "description": "Tab group color."
+  },
+  "colorGreen": {
+    "message": "Green",
+    "description": "Tab group color."
+  },
+  "colorPurple": {
+    "message": "Purple",
+    "description": "Tab group color."
+  },
+  "colorCyan": {
+    "message": "Cyan",
+    "description": "Tab group color."
+  },
+  "colorOrange": {
+    "message": "Orange",
+    "description": "Tab group color."
+  },
+  "colorPink": {
+    "message": "Pink",
+    "description": "Tab group color."
+  },
+  "colorGrey": {
+    "message": "Gray",
+    "description": "Tab group color."
+  },
+  "behaviorHeading": {
+    "message": "Behavior",
+    "description": "Options section heading."
+  },
+  "modeHeading": {
+    "message": "Where should groups go?",
+    "description": "Options: mode question."
+  },
+  "modeCollectLong": {
+    "message": "Into the window I'm using — matching tabs from other windows are brought over",
+    "description": "Options: collect mode."
+  },
+  "modePerWindowLong": {
+    "message": "Into each tab's own window — nothing moves between windows",
+    "description": "Options: per-window mode."
+  },
+  "collapseLabel": {
+    "message": "Collapse groups after grouping",
+    "description": "Options checkbox."
+  },
+  "includePinnedLabel": {
+    "message": "Include pinned tabs",
+    "description": "Options checkbox."
+  },
+  "includePinnedHelp": {
+    "message": "Firefox unpins a tab when it joins a group. Undo pins it again.",
+    "description": "Options help."
+  },
+  "skipGroupedLabel": {
+    "message": "Leave tabs that are already in my own groups alone",
+    "description": "Options checkbox."
+  },
+  "skipGroupedHelp": {
+    "message": "Otherwise matching tabs are pulled out of whatever group they're in.",
+    "description": "Options help."
+  },
+  "autoGroupLabel": {
+    "message": "Group tabs automatically as I browse",
+    "description": "Options checkbox."
+  },
+  "autoGroupHelp": {
+    "message": "When a tab loads a matching page it joins that rule's group in the same window, and leaves it again if it navigates elsewhere. Groups you made yourself are never touched. Tip: switch off rules like “New tabs” if you use this.",
+    "description": "Options help."
+  },
+  "shortcutHeading": {
+    "message": "Keyboard shortcuts",
+    "description": "Options section heading."
+  },
+  "shortcutGroup": {
+    "message": "Group tabs",
+    "description": "Options: shortcut row label."
+  },
+  "shortcutUndo": {
+    "message": "Undo last grouping",
+    "description": "Options: shortcut row label."
+  },
+  "shortcutNone": {
+    "message": "Not set",
+    "description": "Options: no shortcut."
+  },
+  "shortcutChange": {
+    "message": "Change shortcuts…",
+    "description": "Options button."
+  },
+  "backupHeading": {
+    "message": "Backup",
+    "description": "Options section heading."
+  },
+  "backupHelp": {
+    "message": "Save your rules to a file, or load rules from one. Importing adds to your current list.",
+    "description": "Options help."
+  },
+  "exportButton": {
+    "message": "Export rules",
+    "description": "Options button."
+  },
+  "importButton": {
+    "message": "Import rules…",
+    "description": "Options button."
+  },
+  "importDone_one": {
+    "message": "Imported $COUNT$ rule.",
+    "description": "Toast, singular.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "importDone_other": {
+    "message": "Imported $COUNT$ rules.",
+    "description": "Toast, plural.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "errorImportInvalid": {
+    "message": "That file isn't a rules file this add-on understands.",
+    "description": "Import error."
+  },
+  "errorImportEmpty": {
+    "message": "No rules found in that file.",
+    "description": "Import error."
+  },
+  "resetButton": {
+    "message": "Restore example rules",
+    "description": "Options button."
+  },
+  "resetConfirm": {
+    "message": "Replace all your rules with the examples? Your current rules will be lost unless you export them first.",
+    "description": "Confirm dialog."
+  },
+  "resetDone": {
+    "message": "Example rules restored.",
+    "description": "Toast."
+  },
+  "savedStatus": {
+    "message": "Saved",
+    "description": "Autosave indicator."
+  },
+  "footerPrivacy": {
+    "message": "Everything stays in your browser: this add-on collects no data and makes no network requests.",
+    "description": "Options footer."
+  },
+  "footerVersion": {
+    "message": "Version $VERSION$",
+    "description": "Options footer.",
+    "placeholders": {
+      "version": {
+        "content": "$1"
+      }
+    }
+  }
+}

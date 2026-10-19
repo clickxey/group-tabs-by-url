@@ -1,0 +1,303 @@
+/*
+ * Group Tabs by URL — shared styles for the popup and options page.
+ * Colours follow Firefox's own light/dark palette so the add-on feels native.
+ */
+
+:root {
+  color-scheme: light dark;
+
+  --bg: #ffffff;
+  --surface: #f9f9fb;
+  --surface-2: #f0f0f4;
+  --surface-hover: #e0e0e6;
+  --text: #15141a;
+  --text-muted: #5b5b66;
+  --border: #cfcfd8;
+  --border-subtle: #e6e6ec;
+  --accent: #0061e0;
+  --accent-hover: #0250bb;
+  --accent-active: #053e94;
+  --on-accent: #ffffff;
+  --accent-soft: #deeafc;
+  --danger: #c50042;
+  --success: #017a40;
+  --focus: #0061e0;
+  --shadow: 0 1px 2px rgba(21, 20, 26, 0.06), 0 2px 8px rgba(21, 20, 26, 0.06);
+
+  /* Tab group colours (close to Firefox's). Readable on both themes. */
+  --group-blue: #3577e8;
+  --group-red: #e0404d;
+  --group-yellow: #e9ad0c;
+  --group-green: #22a565;
+  --group-purple: #8b5cf6;
+  --group-cyan: #0fa3b5;
+  --group-orange: #f0781c;
+  --group-pink: #df4aa0;
+  --group-grey: #8f8f9d;
+
+  --radius-sm: 4px;
+  --radius: 8px;
+  --radius-lg: 12px;
+  --font: system-ui, -apple-system, "Segoe UI", Ubuntu, Cantarell, "Noto Sans", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #2b2a33;
+    --surface: #23222b;
+    --surface-2: #3a3944;
+    --surface-hover: #52525e;
+    --text: #fbfbfe;
+    --text-muted: #bfbfc9;
+    --border: #5b5b66;
+    --border-subtle: #42414d;
+    --accent: #00ddff;
+    --accent-hover: #80ebff;
+    --accent-active: #aaf2ff;
+    --on-accent: #15141a;
+    --accent-soft: #1c3a4a;
+    --danger: #ff848b;
+    --success: #54ffbd;
+    --focus: #00ddff;
+    --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 8px rgba(0, 0, 0, 0.25);
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+}
+
+[hidden] {
+  display: none !important;
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-weight: 600;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+/* ---------- Buttons ---------- */
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 32px;
+  padding: 0 14px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.btn:hover {
+  background: var(--surface-hover);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.btn.primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+.btn.primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+}
+.btn.primary:active:not(:disabled) {
+  background: var(--accent-active);
+}
+.btn.ghost {
+  background: transparent;
+  border-color: var(--border);
+}
+.btn.ghost:hover {
+  background: var(--surface-2);
+}
+.btn.danger-text {
+  color: var(--danger);
+}
+.btn svg {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+
+.icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+}
+.icon-btn:hover:not(:disabled) {
+  background: var(--surface-2);
+  color: var(--text);
+}
+.icon-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.icon-btn svg {
+  width: 16px;
+  height: 16px;
+}
+.icon-btn.danger:hover:not(:disabled) {
+  color: var(--danger);
+}
+
+.link-btn {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font-weight: 600;
+  cursor: pointer;
+}
+.link-btn:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Colour dot ---------- */
+
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex: none;
+  background: var(--group-grey);
+}
+[data-color="blue"] { --swatch: var(--group-blue); }
+[data-color="red"] { --swatch: var(--group-red); }
+[data-color="yellow"] { --swatch: var(--group-yellow); }
+[data-color="green"] { --swatch: var(--group-green); }
+[data-color="purple"] { --swatch: var(--group-purple); }
+[data-color="cyan"] { --swatch: var(--group-cyan); }
+[data-color="orange"] { --swatch: var(--group-orange); }
+[data-color="pink"] { --swatch: var(--group-pink); }
+[data-color="grey"] { --swatch: var(--group-grey); }
+.dot[data-color] {
+  background: var(--swatch);
+}
+
+/* ---------- Switch ---------- */
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 32px;
+  height: 18px;
+  flex: none;
+}
+.switch input {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.switch .track {
+  position: absolute;
+  inset: 0;
+  border-radius: 9px;
+  border: 1px solid var(--text-muted);
+  background: var(--surface-2);
+  pointer-events: none;
+  transition: background 0.15s, border-color 0.15s;
+}
+.switch .track::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: transform 0.15s, background 0.15s;
+}
+.switch input:checked + .track {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.switch input:checked + .track::after {
+  background: var(--on-accent);
+  transform: translateX(14px);
+}
+.switch input:focus-visible + .track {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+[dir="rtl"] .switch input:checked + .track::after {
+  transform: translateX(-14px);
+}
+[dir="rtl"] .switch .track::after {
+  left: auto;
+  right: 3px;
+}
+
+/* ---------- Toast ---------- */
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  max-width: calc(100vw - 32px);
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  background: var(--text);
+  color: var(--bg);
+  box-shadow: var(--shadow);
+  z-index: 10;
+}
+.toast .link-btn {
+  color: inherit;
+  text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

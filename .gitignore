@@ -1,0 +1,4 @@
+node_modules/
+dist/
+docs/screenshots/raw-*.png
+.DS_Store

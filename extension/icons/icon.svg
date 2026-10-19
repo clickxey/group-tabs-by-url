@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Group outline -->
+  <rect x="2.5" y="9" width="27" height="17.5" rx="5" fill="none" stroke="#3577e8" stroke-width="2.4"/>
+  <!-- Group label -->
+  <rect x="5" y="4.5" width="11" height="7" rx="3.5" fill="#3577e8"/>
+  <!-- Two tabs collected inside -->
+  <rect x="6.5" y="15" width="8.5" height="7.5" rx="2" fill="#f0781c"/>
+  <rect x="17" y="15" width="8.5" height="7.5" rx="2" fill="#f0781c" opacity="0.6"/>
+</svg>
