@@ -207,6 +207,88 @@
     "message": "Off",
     "description": "Popup: shown instead of a count for a disabled rule."
   },
+  "quickHeading": {
+    "message": "Group once",
+    "description": "Popup: heading (screen readers only) of the one-time rule box."
+  },
+  "quickPlaceholder": {
+    "message": "Group once: type part of an address",
+    "description": "Popup: placeholder of the one-time rule box."
+  },
+  "quickClear": {
+    "message": "Clear",
+    "description": "Popup: button that empties the one-time rule box."
+  },
+  "quickNote": {
+    "message": "One-time rule: nothing is saved, and your saved rules are ignored.",
+    "description": "Popup: explains the one-time rule box."
+  },
+  "quickNamePlaceholder": {
+    "message": "Group name (default: $TEXT$)",
+    "description": "Popup: placeholder of the group name field. TEXT is what the user typed.",
+    "placeholders": {
+      "text": {
+        "content": "$1"
+      }
+    }
+  },
+  "quickColor": {
+    "message": "Group color: $COLOR$. Click to change.",
+    "description": "Popup: tooltip of the color button. COLOR is a color name.",
+    "placeholders": {
+      "color": {
+        "content": "$1"
+      }
+    }
+  },
+  "quickInvalidSite": {
+    "message": "That isn’t a website address. Try “Address contains” instead.",
+    "description": "Popup: one-time rule error."
+  },
+  "quickInvalidRegex": {
+    "message": "That isn’t a valid regular expression.",
+    "description": "Popup: one-time rule error."
+  },
+  "quickMatches_one": {
+    "message": "$COUNT$ matching tab",
+    "description": "Popup: count above the preview, singular.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "quickMatches_other": {
+    "message": "$COUNT$ matching tabs",
+    "description": "Popup: count above the preview, plural.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "quickMore": {
+    "message": "…and $COUNT$ more",
+    "description": "Popup: last line of a long preview.",
+    "placeholders": {
+      "count": {
+        "content": "$1"
+      }
+    }
+  },
+  "quickSave": {
+    "message": "Save as a rule",
+    "description": "Popup: turns the one-time rule into a saved rule."
+  },
+  "quickSaved": {
+    "message": "Saved “$NAME$” as a rule.",
+    "description": "Popup: after saving the one-time rule.",
+    "placeholders": {
+      "name": {
+        "content": "$1"
+      }
+    }
+  },
   "tabCount_one": {
     "message": "$COUNT$ tab",
     "description": "Count, singular.",

@@ -111,6 +111,37 @@ test("collapse option collapses the new groups", async () => {
   assert.equal(g.collapsed, true);
 });
 
+test("one-time rule: groups only its own matches, ignores saved rules, and can be undone", async () => {
+  const { browser, engine, check } = setup([
+    { id: 1, tabs: [u("kaggle.com/competitions/rsna-knee/data"), u("x.com/1"), u("kaggle.com/code")] },
+    { id: 2, tabs: [u("kaggle.com/competitions/rsna-knee/leaderboard"), u("x.com/2")] },
+  ]);
+  const before = { 1: browser._layout(1), 2: browser._layout(2) };
+  const quick = R.normalizeRule({ id: "quick", name: "", color: "green", type: "contains", patterns: ["RSNA-knee"] });
+
+  const res = await engine.groupNow(settings(), 1, { rules: [quick] });
+  assert.equal(res.tabs, 2);
+  assert.equal(res.groups, 1);
+  assert.equal(browser._layout(1), "[RSNA-knee: kaggle.com/competitions/rsna-knee/data kaggle.com/competitions/rsna-knee/leaderboard ] x.com/1 kaggle.com/code");
+  assert.equal(browser._layout(2), "x.com/2", "tabs matching saved rules are left alone");
+  const [g] = await browser.tabGroups.query({});
+  assert.deepEqual([g.title, g.color], ["RSNA-knee", "green"], "untitled one-time rule uses the typed text");
+  check();
+
+  await engine.undo();
+  assert.equal(browser._layout(1), before[1]);
+  assert.equal(browser._layout(2), before[2]);
+  check();
+});
+
+test("one-time rule respects the behaviour settings", async () => {
+  const { browser, engine } = setup([{ id: 1, tabs: [{ ...u("kaggle.com/c/a"), group: "Mine" }, u("kaggle.com/c/b"), { ...u("kaggle.com/c/p"), pinned: true }].reverse() }]);
+  const quick = R.normalizeRule({ id: "quick", name: "Comp", type: "site", patterns: ["kaggle.com"] });
+  await engine.groupNow(settings({ skipGrouped: true, collapse: true }), 1, { rules: [quick] });
+  assert.equal(browser._layout(1), "📌kaggle.com/c/p [Comp: kaggle.com/c/b ] [Mine: kaggle.com/c/a ]");
+  assert.equal((await browser.tabGroups.query({})).find((g) => g.title === "Comp").collapsed, true);
+});
+
 test("nothing to do: no changes and no undo snapshot", async () => {
   const { browser, engine, check } = setup([{ id: 1, tabs: [u("a.com")] }]);
   const res = await engine.groupNow(settings(), 1);

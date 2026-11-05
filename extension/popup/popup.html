@@ -15,7 +15,41 @@
     </button>
   </header>
 
-  <main>
+  <section class="quick" aria-labelledby="quick-heading">
+    <h2 id="quick-heading" class="visually-hidden" data-i18n="quickHeading"></h2>
+    <div class="quick-field">
+      <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M7 2.5a4.5 4.5 0 1 0 2.67 8.12l2.85 2.86a.75.75 0 1 0 1.06-1.06l-2.86-2.85A4.5 4.5 0 0 0 7 2.5zM4 7a3 3 0 1 1 6 0 3 3 0 0 1-6 0z"/></svg>
+      <input id="quick-text" type="text" autocomplete="off" spellcheck="false" autocapitalize="off"
+             data-i18n-placeholder="quickPlaceholder" data-i18n-aria-label="quickPlaceholder">
+      <button id="quick-clear" class="icon-btn" type="button" data-i18n-title="quickClear" data-i18n-aria-label="quickClear" hidden>
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4.28 3.22a.75.75 0 0 0-1.06 1.06L6.94 8l-3.72 3.72a.75.75 0 1 0 1.06 1.06L8 9.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L9.06 8l3.72-3.72a.75.75 0 0 0-1.06-1.06L8 6.94 4.28 3.22z"/></svg>
+      </button>
+    </div>
+
+    <div id="quick-panel" class="quick-panel" hidden>
+      <p class="quick-note muted" data-i18n="quickNote"></p>
+      <div class="quick-row">
+        <select id="quick-type" data-i18n-aria-label="ruleTypeLabel">
+          <option value="contains" data-i18n="typeContains"></option>
+          <option value="site" data-i18n="typeSite"></option>
+          <option value="prefix" data-i18n="typePrefix"></option>
+          <option value="regex" data-i18n="typeRegex"></option>
+        </select>
+      </div>
+      <div class="quick-row">
+        <button id="quick-color" class="color-btn" type="button"><span class="dot" id="quick-dot"></span></button>
+        <input id="quick-name" type="text" autocomplete="off" data-i18n-aria-label="ruleNameLabel">
+      </div>
+      <p id="quick-error" class="quick-error" role="alert" hidden></p>
+      <div class="quick-head">
+        <span id="quick-count" class="quick-count"></span>
+        <button id="quick-save" class="link-btn" type="button" data-i18n="quickSave"></button>
+      </div>
+      <ul id="quick-preview" class="quick-preview"></ul>
+    </div>
+  </section>
+
+  <main id="rules-section">
     <div class="section-head">
       <h2 data-i18n="popupRulesHeading"></h2>
     </div>
