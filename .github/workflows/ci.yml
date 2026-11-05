@@ -1,0 +1,38 @@
+# Runs on every pull request and every push to main:
+# tests, Mozilla's add-on linter, and a test build you can download
+# from the run's "Artifacts" section to try a PR in Firefox.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Tests
+        run: npm test
+
+      - name: Lint (addons-linter via web-ext)
+        run: npx --yes web-ext@10 lint --source-dir extension
+
+      - name: Build
+        run: npx --yes web-ext@10 build --source-dir extension --artifacts-dir dist --filename group-tabs-by-url-test-build.zip
+
+      - name: Upload test build
+        uses: actions/upload-artifact@v4
+        with:
+          name: group-tabs-by-url-test-build
+          path: dist/group-tabs-by-url-test-build.zip
+          retention-days: 14
