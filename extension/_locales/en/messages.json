@@ -49,6 +49,24 @@
     "message": "Add a rule for this site…",
     "description": "Tab context menu, generic."
   },
+  "menuGroupBase": {
+    "message": "Group all tabs from $SITE$ and its subdomains",
+    "description": "Tab context menu, shown for subdomains. SITE is the main domain, e.g. wikipedia.org when the tab is on en.wikipedia.org.",
+    "placeholders": {
+      "site": {
+        "content": "$1"
+      }
+    }
+  },
+  "menuAddBaseRule": {
+    "message": "Add a rule for $SITE$ and its subdomains…",
+    "description": "Tab context menu, shown for subdomains. SITE is the main domain.",
+    "placeholders": {
+      "site": {
+        "content": "$1"
+      }
+    }
+  },
   "menuUndo": {
     "message": "Undo last grouping",
     "description": "Toolbar button context menu."

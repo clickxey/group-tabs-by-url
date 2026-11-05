@@ -266,6 +266,57 @@
     }
   }
 
+  /*
+   * Endings under which every name belongs to someone different, so the
+   * part before them is the "main" domain: bbc.co.uk, not co.uk;
+   * someone.github.io, not github.io. This is a short, hand-picked list of
+   * common entries from the Public Suffix List (publicsuffix.org), not the
+   * whole list. Unknown endings are treated as one label (".com", ".org").
+   */
+  const MULTI_PART_SUFFIXES = new Set([
+    // Country domains with a second level
+    "co.uk", "org.uk", "ac.uk", "gov.uk", "me.uk", "ltd.uk", "plc.uk", "net.uk", "sch.uk", "nhs.uk",
+    "com.au", "net.au", "org.au", "edu.au", "gov.au", "asn.au", "id.au",
+    "co.nz", "net.nz", "org.nz", "ac.nz", "govt.nz",
+    "co.jp", "ne.jp", "or.jp", "ac.jp", "go.jp", "gr.jp", "ed.jp", "lg.jp",
+    "co.kr", "or.kr", "ne.kr", "ac.kr", "go.kr",
+    "com.cn", "net.cn", "org.cn", "edu.cn", "gov.cn",
+    "com.hk", "org.hk", "edu.hk", "gov.hk", "com.tw", "org.tw", "edu.tw", "gov.tw",
+    "com.sg", "edu.sg", "gov.sg", "com.my", "com.ph", "com.vn", "co.th", "ac.th", "co.id", "ac.id", "go.id",
+    "co.in", "net.in", "org.in", "ac.in", "edu.in", "gov.in",
+    "com.pk", "gov.pk", "com.bd", "com.sa", "gov.sa", "co.il", "org.il", "ac.il", "gov.il",
+    "com.tr", "org.tr", "edu.tr", "gov.tr", "com.ua", "org.ua", "gov.ua", "com.pl", "net.pl", "org.pl", "gov.pl",
+    "co.at", "or.at", "ac.at", "gv.at", "com.es", "org.es", "gob.es", "com.pt", "com.gr", "co.hu", "com.cy",
+    "com.br", "net.br", "org.br", "edu.br", "gov.br", "com.mx", "org.mx", "edu.mx", "gob.mx",
+    "com.ar", "gob.ar", "com.co", "gov.co", "com.pe", "gob.pe", "gob.cl", "com.uy", "com.ec", "com.ve",
+    "co.za", "org.za", "ac.za", "gov.za", "co.ke", "or.ke", "co.tz", "co.ug", "com.ng", "gov.ng", "com.eg", "gov.eg",
+    // Hosting where each subdomain is a different person's site
+    "github.io", "gitlab.io", "netlify.app", "vercel.app", "pages.dev", "workers.dev", "web.app",
+    "firebaseapp.com", "appspot.com", "herokuapp.com", "azurewebsites.net", "cloudfront.net", "s3.amazonaws.com",
+  ]);
+
+  /**
+   * The main domain of a host, when the host is a subdomain of it:
+   *   "en.wikipedia.org" → "wikipedia.org", "news.bbc.co.uk" → "bbc.co.uk".
+   * Returns null when there is nothing shorter to offer ("wikipedia.org",
+   * "bbc.co.uk", "me.github.io", "localhost", IP addresses).
+   */
+  function baseDomain(host) {
+    const h = String(host || "").toLowerCase().replace(/\.$/, "");
+    if (!h || h.includes(":") || /^\d+(\.\d+){3}$/.test(h)) return null;
+    const labels = h.split(".");
+    if (labels.some((l) => !l)) return null;
+    let suffixLabels = 1;
+    for (let n = labels.length - 1; n >= 2; n--) {
+      if (MULTI_PART_SUFFIXES.has(labels.slice(-n).join("."))) {
+        suffixLabels = n;
+        break;
+      }
+    }
+    if (labels.length <= suffixLabels + 1) return null;
+    return labels.slice(-(suffixLabels + 1)).join(".");
+  }
+
   /** True if an existing "site" rule already covers exactly this site. */
   function findSiteRule(rules, site) {
     return (
@@ -365,6 +416,7 @@
     compileEnabled,
     findMatch,
     siteFromUrl,
+    baseDomain,
     findSiteRule,
     parseLegacyText,
     exportRules,
