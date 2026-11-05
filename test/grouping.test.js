@@ -163,6 +163,17 @@ test("one-off 'group this site' uses the matching rule's name and colour", async
   check();
 });
 
+test("groupSite with a main domain gathers every subdomain", async () => {
+  const { browser, engine, check } = setup([
+    { id: 1, tabs: [u("en.wikipedia.org/wiki/Knee"), u("x.com/1"), u("wikipedia.org")] },
+    { id: 2, tabs: [u("ru.wikipedia.org/wiki/Колено"), u("wikipedia.example.com")] },
+  ]);
+  await engine.groupSite(R.baseDomain("en.wikipedia.org"), settings(), 1);
+  assert.equal(browser._layout(1), "[wikipedia.org: en.wikipedia.org/wiki/Knee wikipedia.org ru.wikipedia.org/wiki/Колено ] x.com/1");
+  assert.equal(browser._layout(2), "wikipedia.example.com");
+  check();
+});
+
 test("auto-group: adds new matches, releases tabs that stop matching, ignores user groups", async () => {
   const { browser, engine, check } = setup([
     { id: 1, tabs: [u("a.com"), { ...u("x.com/mine"), group: "Mine" }, u("x.com/1")] },
@@ -195,4 +206,84 @@ test("settings store: addSiteRule doesn't duplicate", async () => {
   assert.equal(again.rule.id, first.rule.id);
   const s = await store.load();
   assert.equal(s.rules.filter((r) => r.name === "github.com").length, 1);
+});
+
+/* ------------------------------------------------------------------ */
+/* Background script: tab context menu                                 */
+/* ------------------------------------------------------------------ */
+
+const vm = require("node:vm");
+const fs = require("node:fs");
+const path = require("node:path");
+
+/** Runs the real background script against the fake browser. */
+function loadBackground(windows) {
+  const browser = createFakeBrowser({ windows });
+  const ext = path.join(__dirname, "..", "extension");
+  const messages = JSON.parse(fs.readFileSync(path.join(ext, "_locales/en/messages.json"), "utf8"));
+  const listeners = {};
+  const event = (name) => ({ addListener: (fn) => (listeners[name] = fn), removeListener() {} });
+  const menus = new Map();
+  const created = [];
+  Object.assign(browser, {
+    i18n: {
+      getMessage(key, subs = []) {
+        const e = messages[key];
+        if (!e) return "";
+        let m = e.message;
+        for (const [name, ph] of Object.entries(e.placeholders || {})) m = m.split("$" + name.toUpperCase() + "$").join([].concat(subs)[Number(ph.content.slice(1)) - 1]);
+        return m;
+      },
+    },
+    runtime: { id: "test", getURL: (p) => "moz-extension://test/" + p, openOptionsPage() {}, onMessage: event("message"), onInstalled: event("installed"), onStartup: event("startup") },
+    commands: { onCommand: event("command") },
+    menus: {
+      async removeAll() { menus.clear(); },
+      create(item) { menus.set(item.id, { visible: true, enabled: true, ...item }); },
+      async update(id, props) { Object.assign(menus.get(id), props); },
+      refresh() {},
+      onShown: event("shown"),
+      onClicked: event("clicked"),
+    },
+  });
+  browser.storage.onChanged = event("storage");
+  browser.tabs.onUpdated = event("updated");
+  browser.tabs.onRemoved = event("removed");
+  browser.tabs.create = async (props) => created.push(props.url);
+  const context = vm.createContext({ browser, console, setTimeout, clearTimeout, URL });
+  for (const f of ["shared/rules.js", "shared/settings.js", "shared/grouping.js", "background/background.js"]) {
+    vm.runInContext(fs.readFileSync(path.join(ext, f), "utf8"), context, { filename: f });
+  }
+  return { browser, listeners, menus, created };
+}
+
+test("tab menu: subdomain tabs also offer the main domain", async () => {
+  const { browser, listeners, menus, created } = loadBackground([
+    { id: 1, tabs: [u("en.wikipedia.org/wiki/Knee"), u("x.com/1"), u("ru.wikipedia.org/wiki/A"), u("wikipedia.org")] },
+  ]);
+  await listeners.installed({ reason: "update" });
+
+  const tab = await browser.tabs.get(1);
+  await listeners.shown({ contexts: ["tab"] }, tab);
+  const visible = [...menus.values()].filter((m) => m.contexts.includes("tab") && m.visible && m.type !== "separator").map((m) => m.title);
+  assert.deepEqual(visible, [
+    "Group all tabs from en.wikipedia.org",
+    "Group all tabs from wikipedia.org and its subdomains",
+    "Add a rule for en.wikipedia.org…",
+    "Add a rule for wikipedia.org and its subdomains…",
+  ]);
+
+  await listeners.shown({ contexts: ["tab"] }, await browser.tabs.get(4)); // plain wikipedia.org
+  assert.equal(menus.get("group-base-domain").visible, false);
+  assert.equal(menus.get("add-base-domain-rule").visible, false);
+  assert.equal(menus.get("group-site").title, "Group all tabs from wikipedia.org");
+
+  await listeners.clicked({ menuItemId: "group-base-domain" }, tab);
+  assert.equal(browser._layout(1), "[wikipedia.org: en.wikipedia.org/wiki/Knee ru.wikipedia.org/wiki/A wikipedia.org ] x.com/1");
+
+  await listeners.clicked({ menuItemId: "add-base-domain-rule" }, tab);
+  const { settings: saved } = await browser.storage.local.get("settings");
+  const rule = saved.rules.at(-1);
+  assert.deepEqual([rule.type, rule.patterns], ["site", ["wikipedia.org"]]);
+  assert.equal(created.at(-1), "moz-extension://test/options/options.html#rule=" + rule.id);
 });

@@ -126,3 +126,15 @@ test("makeRule picks an unused colour", () => {
   const rules = R.normalizeRules([{ color: "blue" }, { color: "red" }]);
   assert.equal(R.makeRule({ patterns: ["a.com"] }, rules).color, "yellow");
 });
+
+test("baseDomain: offers the main domain only for subdomains", () => {
+  assert.equal(R.baseDomain("en.wikipedia.org"), "wikipedia.org");
+  assert.equal(R.baseDomain("a.b.example.com"), "example.com");
+  assert.equal(R.baseDomain("news.bbc.co.uk"), "bbc.co.uk");
+  assert.equal(R.baseDomain("docs.mysite.github.io"), "mysite.github.io");
+  assert.equal(R.baseDomain("a.b.s3.amazonaws.com"), "b.s3.amazonaws.com");
+  assert.equal(R.baseDomain("EN.Wikipedia.org."), "wikipedia.org");
+  for (const host of ["wikipedia.org", "bbc.co.uk", "mysite.github.io", "github.io", "localhost", "192.168.1.10", "[::1]", "", null]) {
+    assert.equal(R.baseDomain(host), null, String(host));
+  }
+});

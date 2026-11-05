@@ -156,7 +156,15 @@
 
     /** One-off: group every tab from the site of `tab`, without saving a rule. */
     async function groupSiteOf(tab, settings, targetWindowId) {
-      const site = Rules.siteFromUrl(tab.url || "");
+      return groupSite(Rules.siteFromUrl(tab.url || ""), settings, targetWindowId);
+    }
+
+    /**
+     * One-off: group every tab from `site` and its subdomains, without
+     * saving a rule. Uses the name and colour of a matching saved rule if
+     * there is one.
+     */
+    async function groupSite(site, settings, targetWindowId) {
       if (!site) return { tabs: 0, groups: 0, results: [] };
       const existing = Rules.findSiteRule(settings.rules, site);
       const rule = Rules.normalizeRule({
@@ -327,7 +335,7 @@
       return "grouped";
     }
 
-    return { plan, countMatches, groupNow, groupSiteOf, undo, getUndoInfo, autoGroupTab };
+    return { plan, countMatches, groupNow, groupSite, groupSiteOf, undo, getUndoInfo, autoGroupTab };
   }
 
   const api = { createEngine, NO_GROUP };

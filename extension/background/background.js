@@ -63,7 +63,10 @@ browser.commands.onCommand.addListener(async (command) => {
 
 const MENU = {
   groupSite: "group-site",
+  groupBase: "group-base-domain",
+  separator: "tab-separator",
   addRule: "add-site-rule",
+  addBaseRule: "add-base-domain-rule",
   undo: "undo",
   editRules: "edit-rules",
 };
@@ -71,7 +74,10 @@ const MENU = {
 async function createMenus() {
   await browser.menus.removeAll();
   browser.menus.create({ id: MENU.groupSite, title: t("menuGroupSiteGeneric"), contexts: ["tab"] });
+  browser.menus.create({ id: MENU.groupBase, title: t("menuGroupSiteGeneric"), contexts: ["tab"], visible: false });
+  browser.menus.create({ id: MENU.separator, type: "separator", contexts: ["tab"] });
   browser.menus.create({ id: MENU.addRule, title: t("menuAddRuleGeneric"), contexts: ["tab"] });
+  browser.menus.create({ id: MENU.addBaseRule, title: t("menuAddRuleGeneric"), contexts: ["tab"], visible: false });
   browser.menus.create({ id: MENU.undo, title: t("menuUndo"), contexts: ["action"] });
   browser.menus.create({ id: MENU.editRules, title: t("menuEditRules"), contexts: ["action"] });
 }
@@ -84,10 +90,20 @@ browser.runtime.onInstalled.addListener(async (details) => {
 });
 browser.runtime.onStartup.addListener(createMenus);
 
-// Show the site name in the tab menu, e.g. "Group all tabs from github.com".
+/**
+ * The sites a tab's menu offers: the tab's own site ("en.wikipedia.org")
+ * and, when that is a subdomain, its main domain ("wikipedia.org").
+ */
+function sitesOf(tab) {
+  const site = tab ? GTURules.siteFromUrl(tab.url || "") : null;
+  return { site, base: site ? GTURules.baseDomain(site) : null };
+}
+
+// Show the site names in the tab menu, e.g. "Group all tabs from en.wikipedia.org"
+// and "Group all tabs from wikipedia.org and its subdomains".
 browser.menus.onShown.addListener(async (info, tab) => {
   if (info.contexts.includes("tab")) {
-    const site = tab && GTURules.siteFromUrl(tab.url || "");
+    const { site, base } = sitesOf(tab);
     await browser.menus.update(MENU.groupSite, {
       title: site ? t("menuGroupSite", [site]) : t("menuGroupSiteGeneric"),
       enabled: !!site,
@@ -96,6 +112,14 @@ browser.menus.onShown.addListener(async (info, tab) => {
       title: site ? t("menuAddRule", [site]) : t("menuAddRuleGeneric"),
       enabled: !!site,
     });
+    await browser.menus.update(MENU.groupBase, {
+      title: base ? t("menuGroupBase", [base]) : t("menuGroupSiteGeneric"),
+      visible: !!base,
+    });
+    await browser.menus.update(MENU.addBaseRule, {
+      title: base ? t("menuAddBaseRule", [base]) : t("menuAddRuleGeneric"),
+      visible: !!base,
+    });
   }
   if (info.contexts.includes("action")) {
     await browser.menus.update(MENU.undo, { enabled: !!(await engine.getUndoInfo()) });
@@ -103,18 +127,26 @@ browser.menus.onShown.addListener(async (info, tab) => {
   browser.menus.refresh();
 });
 
+async function addRuleAndShow(site) {
+  if (!site) return;
+  const { rule } = await store.addSiteRule(site);
+  await browser.tabs.create({ url: browser.runtime.getURL("options/options.html#rule=" + encodeURIComponent(rule.id)) });
+}
+
 browser.menus.onClicked.addListener(async (info, tab) => {
   switch (info.menuItemId) {
     case MENU.groupSite:
-      if (tab) await engine.groupSiteOf(tab, await getSettings(), tab.windowId);
+      if (tab) await engine.groupSite(sitesOf(tab).site, await getSettings(), tab.windowId);
       break;
-    case MENU.addRule: {
-      const site = tab && GTURules.siteFromUrl(tab.url || "");
-      if (!site) break;
-      const { rule } = await store.addSiteRule(site);
-      await browser.tabs.create({ url: browser.runtime.getURL("options/options.html#rule=" + encodeURIComponent(rule.id)) });
+    case MENU.groupBase:
+      if (tab) await engine.groupSite(sitesOf(tab).base, await getSettings(), tab.windowId);
       break;
-    }
+    case MENU.addRule:
+      await addRuleAndShow(sitesOf(tab).site);
+      break;
+    case MENU.addBaseRule:
+      await addRuleAndShow(sitesOf(tab).base);
+      break;
     case MENU.undo:
       await engine.undo();
       break;
