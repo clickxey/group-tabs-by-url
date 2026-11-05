@@ -9,11 +9,12 @@ A Firefox add-on that collects every tab whose address matches your rules into t
 ## Features
 
 - **One click (or <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>)** groups all matching tabs.
+- **Group once, without a rule.** Type part of an address in the popup's top box, check the preview, and group just those tabs. Nothing is saved.
 - **Rules that understand websites.** A *Website* rule for `x.com` matches `x.com` and `mobile.x.com` but never `netflix.com`. Add a path to narrow it down, such as `google.com/search`.
 - **Four match types:** Website, Address contains, Address starts with, and Regular expression.
 - **Works across windows.** Gather matches into the current window, or group them inside each window.
 - **Undo.** Puts every tab back in its old window, position and group. If a group was emptied, it's recreated.
-- **Right-click a tab** and choose *Group all tabs from example.com* or *Add a rule for example.com*.
+- **Right-click a tab** and choose *Group all tabs from example.com* or *Add a rule for example.com*. On a subdomain such as `en.wikipedia.org` you can also pick the whole site: *Group all tabs from wikipedia.org and its subdomains*.
 - **Optional auto-grouping** while you browse. It only acts inside the same window and never touches groups you made yourself.
 - **Live counts** show how many open tabs each rule would catch before you click anything.
 - **Import and export** rules as JSON.
