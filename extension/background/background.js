@@ -28,13 +28,21 @@ browser.storage.onChanged.addListener((changes, area) => {
 /* Messages from the popup and options page                            */
 /* ------------------------------------------------------------------ */
 
+/** Engine options for a one-time grouping, or {} to use the saved rules. */
+function oneTimeRules(rules) {
+  if (!Array.isArray(rules) || !rules.length) return {};
+  return { rules: GTURules.normalizeRules(rules).map((r) => ({ ...r, enabled: true })) };
+}
+
 browser.runtime.onMessage.addListener((message, sender) => {
   // Only our own pages can reach this listener (no externally_connectable),
   // but check anyway that the message comes from this extension.
   if (!message || sender.id !== browser.runtime.id) return undefined;
   switch (message.type) {
     case "groupNow":
-      return getSettings().then((s) => engine.groupNow(s, message.windowId));
+      // `rules` is set for a one-time "quick group" from the popup: those
+      // rules are used instead of the saved ones and are never stored.
+      return getSettings().then((s) => engine.groupNow(s, message.windowId, oneTimeRules(message.rules)));
     case "undo":
       return engine.undo();
     case "getUndoInfo":
