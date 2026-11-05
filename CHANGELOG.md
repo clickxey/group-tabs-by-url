@@ -2,6 +2,10 @@
 
 All notable changes to Group Tabs by URL. Versions follow [semantic versioning](https://semver.org); see [docs/RELEASING.md](docs/RELEASING.md).
 
+## 1.1.1 — 2026-11-05
+
+- The add-on's icon now shows in Firefox's add-ons manager (about:addons) instead of the generic puzzle piece.
+
 ## 1.1.0 — 2026-11-05
 
 - **Group once, without a rule.** Type part of an address in the new box at the top of the popup (for example `rsna-knee`), see which tabs match, and group them. Your saved rules are ignored for that run and nothing is saved. Changed your mind? "Save as a rule" keeps it.
