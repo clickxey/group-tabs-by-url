@@ -1,6 +1,6 @@
 {
   "name": "group-tabs-by-url",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "description": "Firefox add-on: gather tabs whose address matches your rules into tab groups.",
   "license": "MIT",
