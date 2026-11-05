@@ -19,6 +19,7 @@ mkdirSync(out, { recursive: true });
 
 const messages = JSON.parse(readFileSync(path.join(ext, "_locales/en/messages.json"), "utf8"));
 const mockSource = readFileSync(path.join(root, "scripts/mock-browser.js"), "utf8");
+const { version } = JSON.parse(readFileSync(path.join(ext, "manifest.json"), "utf8"));
 
 const TABS = [
   "https://x.com/home", "https://www.youtube.com/watch?v=a1", "https://developer.mozilla.org/en-US/docs/Web",
@@ -47,7 +48,7 @@ const executablePath = process.argv[2] || process.env.CHROMIUM_PATH || undefined
 const browser = await chromium.launch({ executablePath });
 
 async function open(page, file, mock) {
-  await page.addInitScript(`window.__MOCK__ = ${JSON.stringify(mock)};\n${mockSource}`);
+  await page.addInitScript(`window.__MOCK__ = ${JSON.stringify({ ...mock, version })};\n${mockSource}`);
   const [page_, query = ""] = file.split("?");
   await page.goto(pathToFileURL(path.join(ext, page_)).href + (query ? "?" + query : ""));
   await page.waitForTimeout(500);

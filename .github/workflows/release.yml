@@ -1,0 +1,53 @@
+# Pushing a tag like v1.2.0 publishes a GitHub release:
+#   1. checks the tag matches manifest.json, package.json and CHANGELOG.md
+#   2. runs the tests and the linter
+#   3. builds group-tabs-by-url-1.2.0.zip (the file to upload to addons.mozilla.org)
+#   4. creates the release with that zip and the CHANGELOG section as notes
+# See docs/RELEASING.md.
+name: Release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Check the tag matches the add-on version
+        run: node scripts/release-tools.mjs check-version "$TAG"
+
+      - name: Tests
+        run: npm test
+
+      - name: Lint
+        run: npx --yes web-ext@10 lint --source-dir extension
+
+      - name: Build
+        run: npx --yes web-ext@10 build --source-dir extension --artifacts-dir dist --filename "group-tabs-by-url-${TAG#v}.zip"
+
+      - name: Release notes from CHANGELOG.md
+        run: node scripts/release-tools.mjs notes "$TAG" > release-notes.md
+
+      - name: Publish the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ZIP="dist/group-tabs-by-url-${TAG#v}.zip"
+          if gh release view "$TAG" > /dev/null 2>&1; then
+            # A release was already drafted by hand for this tag: just attach the zip.
+            gh release upload "$TAG" "$ZIP" --clobber
+          else
+            gh release create "$TAG" "$ZIP" --title "$TAG" --notes-file release-notes.md --verify-tag
+          fi

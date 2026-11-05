@@ -3,7 +3,7 @@
  * in an ordinary browser tab for design work and store screenshots
  * (see scripts/screenshots.mjs). It is NOT part of the add-on package.
  *
- * Expects window.__MOCK__ = { messages, tabs, settings?, undo?, dark? }.
+ * Expects window.__MOCK__ = { messages, tabs, version?, settings?, undo?, dark? }.
  */
 (function () {
   "use strict";
@@ -52,7 +52,7 @@
     i18n: { getMessage, getUILanguage: () => "en" },
     runtime: {
       id: "mock",
-      getManifest: () => ({ version: "1.0.0" }),
+      getManifest: () => ({ version: cfg.version || "0.0.0" }),
       getURL: (p) => p,
       openOptionsPage() {},
       async sendMessage(msg) {
